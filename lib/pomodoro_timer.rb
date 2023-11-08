@@ -6,12 +6,13 @@ class PomodoroTimer
     @interval = to_minutes(@task_time)
     @pomodoro_count = 0
     @active = true
+    @tread = nil
   end
 
   def start
     send_message("The task has been running for #{@task_time} minutes.")
 
-    Thread.new do
+    @tread = Thread.new do
       sleep(@interval)
 
       if active?
@@ -32,6 +33,9 @@ class PomodoroTimer
 
   def stop
     @active = false
+    if @tread
+      @tread.kill
+    end
   end
 
   private
