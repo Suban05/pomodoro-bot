@@ -7,10 +7,14 @@ class PomodoroBot
   end
 
   def start
-    Telegram::Bot::Client.run(ENV['TELEGRAM_BOT_TOKEN']) do |bot|
-      bot.listen do |message|
-        Thread.new { process_message(bot, message) }
+    begin
+      Telegram::Bot::Client.run(ENV['TELEGRAM_BOT_TOKEN']) do |bot|
+        bot.listen do |message|
+          Thread.new { process_message(bot, message) }
+        end
       end
+    rescue
+      start
     end
   end
 
